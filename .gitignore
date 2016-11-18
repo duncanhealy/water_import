@@ -3,7 +3,7 @@ node_modules
 *.zip
 *.xls
 *.csv
-
+.gitconfig
 importnotes.txt
 process.env
 .env

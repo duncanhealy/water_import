@@ -1,5 +1,6 @@
 var EJSON = require('mongodb-extended-json');
 var BSON = require('bson');
+var XLSX = require('xlsx');
 const xlsTypes = {exceed:"exceed", result:"result", summary:"summary", scheme:"scheme", shortfall:"shortfall", compliance:"compliance", supply:"supply", numberofsamples:"numberofsamples",numberofchecksamples:"numberofchecksamples", none:""};
 const nullstring = "";
 const folderSep = "\\";
@@ -18,6 +19,61 @@ const folderSep = "\\";
 function stripName(name){
 
 
+}
+function showTable(filename){
+  var CvTb = require("convert-table");
+  CvTb({
+    input: filename,
+    table: {
+      chars: { 'top': '═' , 'top-mid': '╤' , 'top-left': '╔' , 'top-right': '╗'
+        , 'bottom': '═' , 'bottom-mid': '╧' , 'bottom-left': '╚' , 'bottom-right': '╝'
+        , 'left': '║' , 'left-mid': '╟' , 'mid': '─' , 'mid-mid': '┼'
+        , 'right': '║' , 'right-mid': '╢' , 'middle': '│' }
+    }
+  }, function(table){
+    table.show() // call show method to show up the table
+  });
+
+}
+
+function loadXLSX(filename) {
+var workbook = XLSX.readFile(filename);
+var sheet_name_list = workbook.SheetNames;
+/*
+sheet_name_list.forEach(function(y) {
+    var worksheet = workbook.Sheets[y];
+    var headers = {};
+    var data = [];
+    for(z in worksheet) {
+        if(z[0] === '!') continue;
+        //parse out the column, row, and value
+        var tt = 0;
+        for (var i = 0; i < z.length; i++) {
+            if (!isNaN(z[i])) {
+                tt = i;
+                break;
+            }
+        };
+        var col = z.substring(0,tt);
+        var row = parseInt(z.substring(tt));
+        var value = worksheet[z].v;
+
+        //store header names
+        if(row == 1 && value) {
+            headers[col] = value;
+            continue;
+        }
+
+        if(!data[row]) data[row]={};
+        data[row][headers[col]] = value;
+    }
+    //drop those first two rows which are empty
+    data.shift();
+    data.shift();
+    return data;
+});
+*/
+return sheet_name_list;
 }
      // List all files in a directory in Node.js recursively in a synchronous fashion
      var walkSync = function(dir, filelist) {
@@ -45,6 +101,10 @@ function stripName(name){
                     let posSlash = ($.indexOf(folderSep));
                     let posSp = ($.indexOf(" "));
                     let pos2ndSlash = (posSlash>0)?($.substring(posSlash+1, $.length-posSlash).indexOf(folderSep)):-1;
+                    let ext = path.extname($);
+                    // load if ext matches
+
+
                    // let county = filename.
                    //console.log ($);
                    //console.log ($.substring(posSlash+1, $.length-posSlash));
@@ -56,9 +116,21 @@ function stripName(name){
                     props["type"] = nullstring;
                     props["year"] = (posSlash>0)?($.substring(0, posSlash)):nullstring;
                     props["county"]= ((pos2ndSlash>0)?$.substring(posSlash+1, posSlash+1+pos2ndSlash):(posSp >0)?($.substring(posSlash+1,posSp)):nullstring);
-                    props['1\\']=posSlash;
-                    props['2\\']=pos2ndSlash;
-                    props['1 ']=posSp;
+                    if(ext === ".xlsx"){
+                        //console.log($);
+                        props.xls = loadXLSX($);
+                        //console.log(props.xls);
+                        
+                    } 
+                    if(ext === ".csv"){
+                       // showTable($);
+                    }
+                    if(ext === ".xls"){
+
+                    }
+                    //props['1\\']=posSlash;
+                    //props['2\\']=pos2ndSlash;
+                    //props['1 ']=posSp;
 
                     // Dun - dun laoighaire
                     // DLR
@@ -105,6 +177,7 @@ function stripName(name){
                         default:
                             props["type"]+=xlsTypes.none;
                     }
+       
                     filelist[$]=props;
                 }
             });
@@ -112,10 +185,10 @@ function stripName(name){
         };
 let _flist = {};
 
-        walkSync("./", _flist);
+        walkSync("./2015", _flist);
          
-console.log( EJSON.stringify(_flist));
-
+//console.log( EJSON.stringify(_flist));
+console.log( _flist);
 //        console.log(_flist.length)
 
         
