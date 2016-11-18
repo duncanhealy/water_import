@@ -1,0 +1,22 @@
+{
+  "name": "water",
+  "version": "1.0.0",
+  "description": "water import data project from EPA xls files",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "xls",
+    "parse",
+    "import"
+  ],
+  "author": "Duncan Healy",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^2.0.0",
+    "fs": "0.0.1-security",
+    "mongodb": "^2.2.11",
+    "mongodb-extended-json": "^1.8.0"
+  }
+}
