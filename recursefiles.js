@@ -1,9 +1,11 @@
 var EJSON = require('mongodb-extended-json');
 var BSON = require('bson');
 var XLSX = require('xlsx');
+var alltojson = require('allto-json');
+var convertjson = require('convert-json');
 const xlsTypes = {exceed:"exceed", result:"result", summary:"summary", scheme:"scheme", shortfall:"shortfall", compliance:"compliance", supply:"supply", numberofsamples:"numberofsamples",numberofchecksamples:"numberofchecksamples", none:""};
 const nullstring = "";
-const folderSep = "\\";
+const folderSep = "\/";
 
  function groupBy(items,propertyName)
 {
@@ -17,7 +19,6 @@ const folderSep = "\\";
 }
 
 function stripName(name){
-
 
 }
 function showTable(filename){
@@ -35,15 +36,71 @@ function showTable(filename){
   });
 
 }
+function parseX(workbook){
+    //var sheet = workbook.Sheets[0];\
+    if(typeof(workbook)==='undefined'){
+        console.error("undefined workbook");
+        return;
+    }
+    var sheet_name_list = workbook.SheetNames;
+    var _xmlreturn = {};
 
+    sheet_name_list.forEach(function(y) {
+    var worksheet = workbook.Sheets[y];
+    var headers = {};
+    var data = [];
+
+    for(z in worksheet) {
+        if(z[0] === '!') continue;
+        //parse out the column, row, and value
+        var tt = 0;
+        for (var i = 0; i < z.length; i++) {
+            if (!isNaN(z[i])) {
+                tt = i;
+                break;
+            }
+        };
+        var col = z.substring(0,tt);
+        var row = parseInt(z.substring(tt));
+        var value = worksheet[z].v;
+
+        //store header names
+        if(row == 1 && value) {
+            headers[col] = value;
+            continue;
+        }
+
+        if(!data[row]) data[row]={};
+        data[row][headers[col]] = value;
+    }
+    //drop those first two rows which are empty
+    //data.shift();
+    //data.shift();
+    if(typeof(y)!='undefined'){
+        if(data.length>0){
+
+           _xmlreturn[y]=data;
+        }
+        //console.log(data.length);
+
+  }
+
+});
+//    console.log(_xmlreturn);
+
+    return _xmlreturn;
+
+}
 function loadXLSX(filename) {
 var workbook = XLSX.readFile(filename);
 var sheet_name_list = workbook.SheetNames;
-/*
+var _xmlreturn = {};
+
 sheet_name_list.forEach(function(y) {
     var worksheet = workbook.Sheets[y];
     var headers = {};
     var data = [];
+    //let z = worksheet[0];
     for(z in worksheet) {
         if(z[0] === '!') continue;
         //parse out the column, row, and value
@@ -70,10 +127,12 @@ sheet_name_list.forEach(function(y) {
     //drop those first two rows which are empty
     data.shift();
     data.shift();
+    //sheet_name_list.y=data;
+    //console.log(data);
     return data;
 });
-*/
-return sheet_name_list;
+//return $_;
+return sheet_name_list.worksheet[0];
 }
      // List all files in a directory in Node.js recursively in a synchronous fashion
      var walkSync = function(dir, filelist) {
@@ -81,7 +140,7 @@ return sheet_name_list;
             var fs = fs || require('fs'),
             files = fs.readdirSync(dir);
             filelist = filelist || {};
-   
+
             files.forEach(function(file) {
                 if (dir === "node_modules") {
 
@@ -97,7 +156,7 @@ return sheet_name_list;
                     //"Monitoring Results"
                     //"Scheme Details" 1 miss mayo! Scheme fixes
                     //"Monitoring Shortfall" 2 miss
-                    let $ =    path.join(dir, file);
+                    var $ =    path.join(dir, file);
                     let posSlash = ($.indexOf(folderSep));
                     let posSp = ($.indexOf(" "));
                     let pos2ndSlash = (posSlash>0)?($.substring(posSlash+1, $.length-posSlash).indexOf(folderSep)):-1;
@@ -116,18 +175,6 @@ return sheet_name_list;
                     props["type"] = nullstring;
                     props["year"] = (posSlash>0)?($.substring(0, posSlash)):nullstring;
                     props["county"]= ((pos2ndSlash>0)?$.substring(posSlash+1, posSlash+1+pos2ndSlash):(posSp >0)?($.substring(posSlash+1,posSp)):nullstring);
-                    if(ext === ".xlsx"){
-                        //console.log($);
-                        props.xls = loadXLSX($);
-                        //console.log(props.xls);
-                        
-                    } 
-                    if(ext === ".csv"){
-                       // showTable($);
-                    }
-                    if(ext === ".xls"){
-
-                    }
                     //props['1\\']=posSlash;
                     //props['2\\']=pos2ndSlash;
                     //props['1 ']=posSp;
@@ -164,20 +211,54 @@ return sheet_name_list;
                             break;
                         case ($.indexOf("Compliance")>0):
                             props["type"]+=xlsTypes.compliance;
-                            break;    
+                            break;
                         case ($.indexOf("Supply")>0)||($.indexOf("Supplies")>0):
                             props["type"]+= xlsTypes.supply;
                             break;
                         case ($.indexOf("No. Of Samples")>0) || ($.indexOf("No of Samples")>0) || ($.indexOf("No. of Samples")>0):
                             props["type"]+= xlsTypes.numberofsamples;
-                            break;  
+                            break;
                         case ($.indexOf("NOOFCH")>0):
                             props["type"]+= xlsTypes.numberofchecksamples;
-                            break;  
+                            break;
                         default:
                             props["type"]+=xlsTypes.none;
                     }
-       
+                    if(ext === ".xlsx"){
+                        //console.log($);
+                        //if(props["county"]=="Wicklow" && props["type"]==xlsTypes.exceed){
+                        convertjson.xlsx(($),function(error,result){
+                                   props.xls = parseX( result);
+                        });
+                                   //console.log(props.xls)
+                        //})
+
+                        //   props.xls = showTable($);
+                        //} else {
+                        //    props.xls ="{}";
+                        //}
+
+                        //console.log(props.xls);
+
+                    }
+                    if(ext === ".csv"){
+                       convertjson.csv($,function(err,result){
+                                   //props.xls = parseX( result);
+
+                                    props.xls = result;
+                          //          console.log(result);
+                                    })
+                    }
+                    if(ext === ".xls"){
+                        convertjson.xls(($),function(error,result){
+                                   props.xls = parseX( result);
+
+                        //props.xls = result;
+                        //console.log(result)
+})
+
+                    }
+
                     filelist[$]=props;
                 }
             });
@@ -186,9 +267,9 @@ return sheet_name_list;
 let _flist = {};
 
         walkSync("./2015", _flist);
-         
-//console.log( EJSON.stringify(_flist));
-console.log( _flist);
+
+console.log( EJSON.stringify(_flist));
+//console.log( _flist);
 //        console.log(_flist.length)
 
-        
+
