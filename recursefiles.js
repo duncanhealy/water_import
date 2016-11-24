@@ -224,6 +224,7 @@ return sheet_name_list.worksheet[0];
                         default:
                             props["type"]+=xlsTypes.none;
                     }
+                    if(props["type"]===xlsTypes.result){
                     if(ext === ".xlsx"){
                         //console.log($);
                         //if(props["county"]=="Wicklow" && props["type"]==xlsTypes.exceed){
@@ -258,6 +259,7 @@ return sheet_name_list.worksheet[0];
 })
 
                     }
+                }
 
                     filelist[$]=props;
                 }
@@ -267,8 +269,9 @@ return sheet_name_list.worksheet[0];
 let _flist = {};
 
         walkSync("./2015", _flist);
-
+console.log ("[");
 console.log( EJSON.stringify(_flist));
+console.log ("]");
 //console.log( _flist);
 //        console.log(_flist.length)
 
