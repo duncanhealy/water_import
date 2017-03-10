@@ -1,9 +1,8 @@
 # Water Import
 
 Relevant URLS
-Trello Board
-https://trello.com/c/tBkrmqEv/48-what-s-in-my-water
-https://codeforireland.slack.com
+[Trello Board]https://trello.com/c/tBkrmqEv/48-what-s-in-my-water
+[Slack]https://codeforireland.slack.com
 
 Need to set your connection string in a .env file with  
 ```
@@ -28,5 +27,5 @@ TODO
 
 
 ### Thanks to EPA for the water data! 
--[] link needed
+#[Water data]https://drive.google.com/file/d/0B430LEzM9ITBbHVxSExkbUJqTjg/view?usp=sharing
 
