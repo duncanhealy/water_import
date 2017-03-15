@@ -1,4 +1,4 @@
-let file = require("fs");
+// let file = require('fs')
 /*
 7za x -o2015 *2015*.zip
 # 2015
@@ -7,8 +7,6 @@ let file = require("fs");
 # /*"Monitoring Results"*
 # /*"Scheme Details"* 1 miss mayo! /*Scheme fixes
 # /*"Monitoring Shortfall"* 2 miss
-
-
 
 node recursefiles.js | find "''"
 

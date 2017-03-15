@@ -1,0 +1,14 @@
+<script src="https://www.gstatic.com/firebasejs/3.7.1/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var dotenv = require('dotenv-safe').load({allowEmptyValue:true})
+
+  var config = {
+    apiKey: process.env.apiKey,
+    authDomain: process.env.authDomain,
+    databaseURL: process.env.databaseURL,
+    storageBucket: process.env.storageBucket,
+    messagingSenderId: process.env.messagingSenderId
+  };
+  firebase.initializeApp(config);
+</script>
