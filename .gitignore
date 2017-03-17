@@ -5,6 +5,7 @@ node_modules
 *.csv
 .gitconfig
 importnotes.txt
+err.txt
 process.env
 .env
 config

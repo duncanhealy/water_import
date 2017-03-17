@@ -1,0 +1,54 @@
+{ //https://code.visualstudio.com/docs/editor/node-debugging
+    // Use IntelliSense to learn about possible Node.js debug attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+{
+    "type": "node",
+    "request": "launch",
+    "name": "Launch Program",
+    "program": "${workspaceRoot}/iterateheaders.js",
+    "port": 5858
+},
+{
+    "name": "Attach to Process",
+    "type": "node",
+    "request": "attach",
+    "processId": "${command.PickProcess}",
+    "port": 5858
+},
+    {
+             "name": "Debug",
+                "type": "chrome",
+                "request": "launch",
+                "webRoot": "${workspaceRoot}",
+                "url": "http://localhost:3000", 
+                "userDataDir": "${workspaceRoot}/.vscode/chrome",
+                "sourceMaps": true,
+                "preLaunchTask": "development",
+                "smartStep": true,
+                "internalConsoleOptions": "openOnSessionStart",
+                "skipFiles": [
+                    "${workspaceRoot}/node_modules/**/*.js",
+                    "${workspaceRoot}/lib/**/*.js"
+                ],
+    "sourceMapPathOverrides": {
+        "/source/*": "${workspaceRoot}/*",
+        "webpack:///./*":   "${webRoot}/*",                    // Example: "webpack:///./src/app.js" -> "/users/me/project/src/app.js",
+        "webpack:///./~/*": "${workspaceRoot}/node_modules/*", // Example: "webpack:///./~/querystring/index.js" -> "/Users/me/project/node_modules/querystring/index.js"
+        "webpack:///*":     "*",                               // Example: "webpack:///C:/project/app.ts" -> "C:/project/app.ts"
+        "meteor://💻app/*": "${webRoot}/*"                    // Example: "meteor://💻app/main.ts" -> "c:/code/main.ts"
+    }
+    ]
+}
+/*
+{
+    "version": "0.1.0",
+    "configurations": [
+
+
+    ]
+
+}
+*/
