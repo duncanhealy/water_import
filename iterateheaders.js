@@ -32,14 +32,14 @@ h.forEach(function (v) {
     return
   }
   console.error('Proccessing ' + v)
-const child = spawn(process.argv[0], ['uniqueparameters.js'], [RegExp.escape(v) + '" 2>>err.txt'], {
-  detached: true,
-  stdio: 'ignore'
-})
+  const child = spawn(process.argv[0], ['uniqueparameters.js'], [RegExp.escape(v) + '" 2>>err.txt'], {
+    detached: true,
+    stdio: 'ignore'
+  })
 
-child.unref();
+  child.unref()
  // const ls = spawn(('node uniqueparameters.js "' + RegExp.escape(v) + '" 2>>err.txt'))
- /* 
+ /*
   ls.stdout.on('data', (data) => {
     console.log(`stdout: ${data}`)
   })
@@ -52,4 +52,3 @@ child.unref();
     console.log(`child process exited with code ${code}`)
   })
 })
-

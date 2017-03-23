@@ -127,7 +127,7 @@ function parseX ($, workbook, param) {
 
             // store header names
       if (row === 1 && value) {
-        //uniquearray.add(value)
+        // uniquearray.add(value)
         headers[col] = value
         continue
       }
@@ -135,7 +135,7 @@ function parseX ($, workbook, param) {
       if (!data[row]) data[row] = {}
       if (headers[col] === param) {
         uniquearray.add(value)
-        //data[row][headers[col]] = value
+        // data[row][headers[col]] = value
       }
     }
         // drop those first two rows which are empty

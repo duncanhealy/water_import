@@ -1,10 +1,9 @@
 let units = ['mg/l',
-'ug/l',
-'Hazen',
-'NTU',
-'100ml',
-'1ml',
-'pH Units',
-'uS/cm@20c',
-'EOF']
+  'ug/l',
+  'Hazen',
+  'NTU',
+  '100ml',
+  '1ml',
+  'pH Units',
+  'uS/cm@20c']
 module.exports = units
