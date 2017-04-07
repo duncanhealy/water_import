@@ -1,5 +1,7 @@
 # Water Import
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/duncanhealy/water_import.svg)](https://greenkeeper.io/)
+
 Relevant URLS
 [Trello Board](https://trello.com/c/tBkrmqEv/48-what-s-in-my-water)
 [Slack](https://codeforireland.slack.com)
